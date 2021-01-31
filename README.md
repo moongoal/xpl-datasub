@@ -12,6 +12,6 @@ The preferred way to initialize the build system is with:
         -D CMAKE_EXPORT_COMPILE_COMMANDS=1
         -G Ninja
 
-When using vcpkg, `-DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake` may be needed, where `VCPKG_ROOT` is the path to the installation of vcpkg.
+When using vcpkg, an additional `-DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake` option may be needed, where `VCPKG_ROOT` is the path to the installation of vcpkg.
 
 To build the project, run `cmake --build build`.
