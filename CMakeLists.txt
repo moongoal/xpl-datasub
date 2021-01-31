@@ -53,3 +53,8 @@ find_file(
 
 target_include_directories(datasub PRIVATE ${XPL_SDK_HDR_DIR})
 target_compile_definitions(datasub PRIVATE IBM XPLM210 _CRT_SECURE_NO_WARNINGS)
+
+find_package(xxHash CONFIG REQUIRED)
+target_link_libraries(datasub PRIVATE xxHash::xxhash)
+target_link_libraries(datasub PRIVATE ${XPL_SDK_LIB})
+target_link_libraries(datasub PRIVATE Ws2_32 wsock32)
