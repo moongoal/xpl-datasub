@@ -9,14 +9,14 @@ set(SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 
 file(
     GLOB_RECURSE SOURCES
-    LIST_DIRECTORIES false 
+    LIST_DIRECTORIES false
     ${SOURCE_DIR}/*.c
 )
 
 add_library(datasub SHARED ${SOURCES})
 
-set(CONTRIB_DIR contrib)
-set(CACHE_DIR cache)
+set(CONTRIB_DIR ${CMAKE_BINARY_DIR}/contrib)
+set(CACHE_DIR ${CMAKE_BINARY_DIR}/cache)
 set(XPL_SDK_ZIP ${CACHE_DIR}/XPSDK303.zip)
 set(XPL_SDK_DIR ${CONTRIB_DIR}/SDK)
 
@@ -40,14 +40,14 @@ endif()
 find_library(
     XPL_SDK_LIB
     XPLM_64
-    PATHS ${CMAKE_BINARY_DIR}/${XPL_SDK_DIR}/Libraries/Win
+    PATHS ${XPL_SDK_DIR}/Libraries/Win
     REQUIRED
 )
 
 find_file(
     XPL_SDK_HDR_DIR
     CHeaders
-    PATHS ${CMAKE_BINARY_DIR}/${XPL_SDK_DIR}
+    PATHS ${XPL_SDK_DIR}
     REQUIRED
 )
 
