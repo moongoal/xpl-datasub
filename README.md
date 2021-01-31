@@ -5,6 +5,7 @@
 ## Development environment set-up
 
 The preferred way to initialize the build system is with:
+
     cmake
         -S .
         -B build
