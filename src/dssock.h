@@ -3,10 +3,8 @@
 
 #define DSSOCK_BACKLOG 16
 
-#ifndef DSSOCK_IMPL
-    extern struct DSSocket;
-    typedef struct DSSocket DSSocket;
-#endif // DSSOCK_IMPL
+struct DSSocket;
+typedef struct DSSocket DSSocket;
 
 DSSocket *new_socket();
 void free_socket(DSSocket * const s);

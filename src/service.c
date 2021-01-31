@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <string.h>
 #include "dssock.h"
 #include "service.h"
 
@@ -14,11 +16,11 @@ void start_service() {
     }
 
     for(size_t i = 0; i < SERVICE_MAX_CONNS; ++i) {
-        clients[i] = NULL;
+        memset(&clients[i], 0, sizeof(DSServiceClient));
     }
 
     server_socket = new_socket();
-    server_socket = open_server_socket(&server_socket, "127.0.0.1", 4047);
+    open_server_socket(server_socket, "127.0.0.1", 4047);
 }
 
 static void close_client_connection(DSServiceClient * const client) {
@@ -28,13 +30,13 @@ static void close_client_connection(DSServiceClient * const client) {
     client->socket = NULL;
 }
 
-inline static void is_client_connected(DSServiceClient * const client) {
+inline static int is_client_connected(DSServiceClient * const client) {
     return client->socket != NULL;
 }
 
 inline static DSServiceClient *get_free_client() {
     for(size_t i = 0; i < SERVICE_MAX_CONNS; ++i) {
-        if(!is_client_connected(clients[i])) {
+        if(!is_client_connected(&clients[i])) {
             return &clients[i];
         }
     }
@@ -44,8 +46,8 @@ inline static DSServiceClient *get_free_client() {
 
 void shutdown_service() {
     for(size_t i = 0; i < SERVICE_MAX_CONNS; ++i) {
-        if(is_client_connected(clients[i])) {
-            close_client_connection(clients[i]);
+        if(is_client_connected(&clients[i])) {
+            close_client_connection(&clients[i]);
         }
     }
 
@@ -77,7 +79,7 @@ static void service_loop_accept() {
 
 static void service_loop_register() {
     for(size_t i = 0; i < SERVICE_MAX_CONNS; ++i) {
-        DSServiceClient * const client = clients[i];
+        DSServiceClient * const client = &clients[i];
     }
 }
 

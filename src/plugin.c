@@ -1,6 +1,9 @@
 //https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK303.zip
-#include <XPLMDefs.h>
+#include <XPLM/XPLMDefs.h>
+#include <XPLM/XPLMPlugin.h>
+#include <XPLM/XPLMProcessing.h>
 #include "service.h"
+#include "drefs.h"
 
 // Number of seconds between each callback call
 #define CALLBACK_INTERVAL 5.0f
@@ -54,7 +57,7 @@ PLUGIN_API void XPluginStop(void) {
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMessage, void *inParam) {
     switch(inMessage) {
         case XPLM_MSG_PLANE_LOADED:
-            int plane_id = (int)inParam;
+            const int plane_id = (int)inParam;
 
             if(plane_id == 0) {
                 // New user plane loaded

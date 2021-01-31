@@ -59,7 +59,7 @@ void compact_sub_datarefs() {
         if(sub_datarefs[i]) {
             n_datarefs++;
 
-            if(!n_sub_datarefs[i - 1]) {
+            if(!sub_datarefs[i - 1]) {
                 has_gaps = 1;
             }
         }

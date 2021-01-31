@@ -1,23 +1,24 @@
 #define DSSOCK_IMPL
 #include <memory.h>
 #include <string.h>
-#include <Windows.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 #include "dssock.h"
 
-typedef struct DSSocket {
+struct DSSocket {
     SOCKET socket;
-} DSSocket;
+};
 
 void open_server_socket(DSSocket * const s,const char * const ip_addr, unsigned short int port) {
     memset(s, 0, sizeof(DSSocket));
 
-    s.socket = socket(
+    s->socket = socket(
         AF_INET,
         SOCK_STREAM,
         IPPROTO_TCP
     );
 
-    if(s.socket == INVALID_SOCKET) {
+    if(s->socket == INVALID_SOCKET) {
         // Error
         abort();
     }
@@ -26,10 +27,10 @@ void open_server_socket(DSSocket * const s,const char * const ip_addr, unsigned 
     const BOOL reuse_addr = TRUE;
 
     setsockopt(
-        s.socket,
+        s->socket,
         SOL_SOCKET,
         SO_REUSEADDR,
-        &reuse_addr,
+        (char *)&reuse_addr,
         sizeof(reuse_addr)
     );
 
@@ -37,18 +38,18 @@ void open_server_socket(DSSocket * const s,const char * const ip_addr, unsigned 
     set_socket_non_blocking(s);
 
     // Bind & listen
-    sockaddr_in service;
+    struct sockaddr_in service;
 
     service.sin_family = AF_INET;
-    service.sin_addr.s_addr = inet_addr(ip_addr);
+    inet_pton(AF_INET, ip_addr, &service.sin_addr);
     service.sin_port = htons((u_short)port);
 
-    if(bind(s.socket, (SOCKADDR *) &service, sizeof(sockaddr_in))) {
+    if(bind(s->socket, (SOCKADDR *) &service, sizeof(struct sockaddr_in))) {
         // Error
         abort();
     }
 
-    if(listen(s.socket, DSSOCK_BACKLOG)) {
+    if(listen(s->socket, DSSOCK_BACKLOG)) {
         // Error
         abort();
     }
@@ -56,7 +57,7 @@ void open_server_socket(DSSocket * const s,const char * const ip_addr, unsigned 
 
 void close_socket(DSSocket * const s) {
     shutdown(
-        s.socket,
+        s->socket,
         SD_BOTH
     );
 
@@ -67,23 +68,23 @@ void set_socket_non_blocking(DSSocket * const s) {
     unsigned long blocking = 0;
 
     ioctlsocket(
-        s.socket,
+        s->socket,
         FIONBIO,
         &blocking
     );
 }
 
 int get_next_socket_connection(DSSocket * const s, DSSocket * const c) {
-    sockaddr addr;
+    struct sockaddr addr;
     int addr_len;
 
-    c.socket = accept(
-        s.socket,
+    c->socket = accept(
+        s->socket,
         &addr,
         &addr_len
     );
 
-    if(c.socket == INVALID_SOCKET) {
+    if(c->socket == INVALID_SOCKET) {
         int last_error = WSAGetLastError();
 
         if(last_error == WSAEWOULDBLOCK) {
@@ -110,7 +111,7 @@ void free_socket(DSSocket * const s) {
 
 int recv_from_socket(DSSocket * const s, char *const buf, size_t const buf_sz) {
     int read_bytes = recv(
-        s.socket,
+        s->socket,
         buf,
         buf_sz,
         0
