@@ -1,4 +1,3 @@
-//https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK303.zip
 #include <XPLM/XPLMDefs.h>
 #include <XPLM/XPLMPlugin.h>
 #include <XPLM/XPLMProcessing.h>
