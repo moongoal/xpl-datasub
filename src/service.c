@@ -3,9 +3,9 @@
 #include "dssock.h"
 #include "service.h"
 
-typedef struct DSServiceClient {
+struct DSServiceClient {
     DSSocket *socket;
-} DSServiceClient;
+};
 
 static DSSocket *server_socket = NULL;
 static DSServiceClient clients[SERVICE_MAX_CONNS];
